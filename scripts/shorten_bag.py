@@ -11,10 +11,16 @@ if (len(sys.argv) < 4):
 cont = -1
 end_t = -1
 
+
 with rosbag.Bag(sys.argv[2], 'w') as outbag:
-  for topic, msg, t in rosbag.Bag(sys.argv[1]).read_messages():
+  bag = rosbag.Bag(sys.argv[1])
+  total = bag.size
+  print 'Total messages: ',total
+  cont2 = 0
+  for topic, msg, t in bag.read_messages():
     if cont < 0:
       cont = 0 # Initialize the start and end times
+      
       start_t = t + rospy.Duration(int(sys.argv[3]))
       if len(sys.argv) > 4:
         end_t = start_t + rospy.Duration(int(sys.argv[4]))
@@ -22,6 +28,11 @@ with rosbag.Bag(sys.argv[2], 'w') as outbag:
     if len(sys.argv) > 4:
       if t > end_t:
         break
+    
+    print 'Completed: ', int((cont*100)/total),'%  Message: ', cont2
+    print "\033[F\033[F"
+    
+    cont2 += 1
     
     if start_t < t:
       outbag.write(topic, msg, t)
