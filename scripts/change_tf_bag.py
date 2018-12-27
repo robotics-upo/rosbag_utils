@@ -23,9 +23,9 @@ with rosbag.Bag(sys.argv[2], 'w') as outbag:
       target_child_id[cont] = split[3]
       t = Transform()
       t.rotation.x = split[4]
-      t.rotation.x = split[5]
-      t.rotation.x = split[6]
-      t.rotation.x = split[7]
+      t.rotation.y = split[5]
+      t.rotation.z = split[6]
+      t.rotation.w = split[7]
       t.translation.x = split[8]
       t.translation.y = split[9]
       t.translation.z = split[10]

@@ -14,7 +14,8 @@ end_t = -1
 
 with rosbag.Bag(sys.argv[2], 'w') as outbag:
   bag = rosbag.Bag(sys.argv[1])
-  total = bag.size
+  
+  total = bag.get_message_count()
   print 'Total messages: ',total
   cont2 = 0
   for topic, msg, t in bag.read_messages():
@@ -29,7 +30,7 @@ with rosbag.Bag(sys.argv[2], 'w') as outbag:
       if t > end_t:
         break
     
-    print 'Completed: ', int((cont*100)/total),'%  Message: ', cont2
+    print 'Completed: ', int((cont2*100)/total),'%  Message: ', cont2
     print "\033[F\033[F"
     
     cont2 += 1
