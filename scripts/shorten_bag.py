@@ -8,6 +8,10 @@ if (len(sys.argv) < 4):
   print 'Usage: {} <input bag> <output bag> <start time(s)> [duration (s)]'.format(sys.argv[0])
   sys.exit(-1)
 
+if sys.argv[1] == sys.argv[2]:
+  print 'Error: the input and output files have identical names'
+  sys.exit(-2)
+
 cont = -1
 end_t = -1
 
