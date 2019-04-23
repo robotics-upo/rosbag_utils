@@ -12,7 +12,7 @@ if (len(sys.argv) < 4):
   sys.exit(-1)
 
 with rosbag.Bag(sys.argv[2], 'w') as outbag:
-  file = open(sys.argv[1],'r')
+  file = open(sys.argv[3],'r')
   cont = 0
   for line in file:
     split = line.split()
