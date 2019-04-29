@@ -32,7 +32,7 @@ else:
 cont_alt_baseline = 0
 cont_baseline = 0
 cont_gt = 0
-
+print "Opening {0}".format(sys.argv[1])
 bag = rosbag.Bag(sys.argv[1])
 total = bag.get_message_count()
 print 'Total messages: ',total
@@ -71,8 +71,8 @@ with rosbag.Bag(sys.argv[2], 'w') as outbag:
             new_msg.gps_position.latitude = graph_matrix[new_msg.id][0]
             new_msg.gps_position.longitude = graph_matrix[new_msg.id][1]
             outbag.write(ground_truth_topic,new_msg,t)
-            outbag.write(topic,msg,t)
             cont_gt += 1
+        outbag.write(topic,msg,t)
     else:
         outbag.write(topic,msg,t)
     print 'Completed: ', int((cont*100)/total),'%  Message: ', cont
