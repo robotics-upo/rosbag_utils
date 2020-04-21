@@ -1,0 +1,19 @@
+<launch>
+
+
+    <node pkg="tf" type="tf_remap" name="tf_remap" output="screen">
+        <!--  Replace tf_old by the original tf topic, usually tf. This is done to avoid conflicts between new tfs and old tfs -->
+        <remap from="tf" to="tf_old"/>
+        <rosparam param="mappings">
+            [{old: odom, new: /m200/odom},
+            {old: nuc, new: /m200/nuc},
+            {old: thermal_camera_front, new: /m200/thermal_camera_front},
+            {old: os1_sensor, new: /m200/os1_sensor},
+            {old: os1_lidar, new: /m200/os1_lidar},
+            {old: os1_imu, new: /m200/os1_imu},
+            {old: world, new: /m200/world},
+            {old: base_link, new: /m200/base_link}]
+        </rosparam>
+    </node>
+
+</launch>
