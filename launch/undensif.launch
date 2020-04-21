@@ -2,8 +2,8 @@
 
   <arg name="in_bag" default="/media/chur/raposa_bags/NIx/"/>
   <arg name="out_bag" default="/media/chur/raposa_bags/NIx/"/>
-  <arg name="topics_to_record" default="-e /os1_cloud_node/points"/>
-  <arg name="rate" default="2"/>
+  <arg name="topics_to_record" default="-a -x (/os1_cloud_node/points)|(/clock)|(/rosout)|(/rosout_agg)"/>
+  <arg name="rate" default="0.25"/>
   <param name="use_sim_time" value="true"/>
 
  <node pkg="cloud_undensifier" type="cloud_undensifier" name="cloud_undensifier">
@@ -14,7 +14,7 @@
   </node>
 <node name="bag_player" type="play" pkg="rosbag" args="$(arg in_bag) --pause --clock -r $(arg rate)" output="screen"/>
 
-<node name="bag_recorder" type="record" pkg="rosbag" args="/os1_cloud_node/points_non_dense -O $(arg out_bag) " />
+<node name="bag_recorder" type="record" pkg="rosbag" args="$(arg topics_to_record) -O $(arg out_bag) " />
 
 
 
