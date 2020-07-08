@@ -13,7 +13,7 @@ def main():
                         help='output bag file with topics merged')
     parser.add_argument('inputbag', nargs='+',
                         help='input bag files')
-    parser.add_argument('-v', '--verbose', action="store_true", default=False,
+    parser.add_argument('-v', '--verbose', action="store_true", default=True,
                         help='verbose output')
     parser.add_argument('-t', '--topics', default="*",
                         help='string interpreted as a list of topics (wildcards \'*\' and \'?\' allowed) to include in the merged bag file')
@@ -34,10 +34,15 @@ def main():
             matchedtopics = []
             included_count = 0
             skipped_count = 0
-            if (args.verbose):
-                print("> Reading bag file: " + ifile)
+            total_count = 0
+            
             with Bag(ifile, 'r') as ib:
+                total_messages=ib.get_message_count()
+                if args.verbose:
+                    print("> Reading bag file: " + ifile + " total messages: " + str(total_messages))
+                    
                 for topic, msg, t in ib:
+                    total_count += 1
                     if any(fnmatchcase(topic, pattern) for pattern in topics):
                         if not topic in matchedtopics:
                             matchedtopics.append(topic)
@@ -47,10 +52,16 @@ def main():
                         included_count += 1
                     else:
                         skipped_count += 1
+                        
+                    if args.verbose:
+                        print 'Completed: ', int((total_count*100)/total_messages),'%  Included messages: ', included_count
+                        print "\033[F\033[F"
+                
             total_included_count += included_count
             total_skipped_count += skipped_count
             if (args.verbose):
                 print("< Included %d messages and skipped %d" % (included_count, skipped_count))
+            
 
     if (args.verbose):
         print("Total: Included %d messages and skipped %d" % (total_included_count, total_skipped_count))
