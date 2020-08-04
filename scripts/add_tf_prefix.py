@@ -16,10 +16,7 @@ cont = -1
 end_t = -1
 
 prefix = sys.argv[3]
-prefix_tf = prefix
-if prefix[len(prefix)-1] != '/':
-    prefix_tf += '/'
-else:
+if prefix[len(prefix)-1] == '/':
     prefix = prefix[0:len(prefix)-1]
     
 
@@ -38,16 +35,16 @@ with rosbag.Bag(sys.argv[2], 'w') as outbag:
                 for i in msg.transforms:
                     # print msg.transforms[0].header
                     if not global_frame_id in i.child_frame_id:
-                        i.child_frame_id = prefix_tf + i.child_frame_id
+                        i.child_frame_id = prefix + i.child_frame_id
                     if not global_frame_id in i.header.frame_id:
-                        i.header.frame_id = prefix_tf + i.header.frame_id    
+                        i.header.frame_id = prefix + i.header.frame_id    
                     
             else:
                 topic = '/' + prefix + topic
                 
             if msg._has_header:
                 if not(global_frame_id in msg.header.frame_id):
-                    msg.header.frame_id = prefix_tf + msg.header.frame_id
+                    msg.header.frame_id = prefix + msg.header.frame_id
                     
                 
             print 'Completed: ', int((cont2*100)/total),'%  Message: ', cont2
