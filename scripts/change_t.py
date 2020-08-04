@@ -21,14 +21,24 @@ with rosbag.Bag(sys.argv[2], 'w') as outbag:
         cont2 = 0
         changes = 0
         for topic, msg, t in bag.read_messages():
-            t = t+ time_offset    
             print 'Completed: ', int((cont2*100)/total),'%  Message: ', cont2
             print "\033[F\033[F"
-            
+               
+            # if "siar" in topic:
+            t = t + time_offset 
             if msg._has_header:
-                msg.header.stamp = t + time_offset
-            
+              msg.header.stamp = msg.header.stamp + time_offset
+              changes += 1
+            if "tf" in topic:
+              
+              for i in msg.transforms:
+              
+                # if "siar" in i.header.frame_id or "siar" in i.child_frame_id: 
+                  # changes += 1
+                  i.header.stamp = i.header.stamp + time_offset
+              
             cont2 += 1
             outbag.write(topic, msg, t)
- 
-print 'Added tf_prefix to all topics in the bag. Number of changes: {}'.format(changes)
+            
+  
+print 'Corrected time in the topics and tfs. Number of changes: {}'.format(changes)
